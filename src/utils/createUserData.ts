@@ -29,6 +29,7 @@ export async function createUserData(ctx: Context, session: Session) {
       totalAffection: 0,
       targetNtrCount: 0,
       targetNtrSuccessCount: 0,
+      interactionWithOtherUser: [],
       drawWifeDate: yesterday,
       lpdaDate: yesterday,
     });
