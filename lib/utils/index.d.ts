@@ -30,7 +30,7 @@ declare const _default: {
             colorDir: string;
             grayDir: string;
         }>;
-        generateMixedBackgroundImage: (ctx: import("koishi").Context, colorImageNames: any, options?: {
+        generateMixedBackgroundImage: (ctx: import("koishi").Context, config: import("..").Config, colorImageNames: any, options?: {
             backgroundPath?: string;
             colorDir?: string;
             grayDir?: string;

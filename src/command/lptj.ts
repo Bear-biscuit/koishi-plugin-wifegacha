@@ -24,7 +24,7 @@ export function lptj(ctx: Context, config: Config) {
           userId: userId,
         })
       )[0].wifeHistories.map((item) => item.wifeName);
-      const imageBuffer = await sprit.generateMixedBackgroundImage(ctx, lpList);
+      const imageBuffer = await sprit.generateMixedBackgroundImage(ctx, config, lpList);
       session.send([
         h("quote", { id: session.messageId }),
         "老婆图鉴（含牛老婆）",
@@ -40,7 +40,7 @@ export function lptj(ctx: Context, config: Config) {
       )[0].wifeHistories
         .filter((item) => !item.isNtr)
         .map((item) => item.wifeName);
-      const imageBuffer = await sprit.generateMixedBackgroundImage(ctx, lpList);
+      const imageBuffer = await sprit.generateMixedBackgroundImage(ctx, config, lpList);
       session.send([
         h("quote", { id: session.messageId }),
         "老婆图鉴（不含牛老婆）",

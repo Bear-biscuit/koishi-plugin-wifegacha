@@ -1,4 +1,5 @@
 import { Context } from 'koishi';
+import { Config } from '../index';
 declare function ensureDirs(): void;
 /**
  * 生成彩色和灰度缩略图
@@ -34,7 +35,7 @@ declare function generateThumbnails(ctx: Context, options?: {
  * @param {number} options.padding - 图片间距
  * @returns {Promise<string>} 输出文件路径
  */
-declare function generateMixedBackgroundImage(ctx: Context, colorImageNames: any, options?: {
+declare function generateMixedBackgroundImage(ctx: Context, config: Config, colorImageNames: any, options?: {
     backgroundPath?: string;
     colorDir?: string;
     grayDir?: string;

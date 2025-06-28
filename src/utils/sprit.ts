@@ -2,6 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import sharp from 'sharp';
 import { Context } from 'koishi';
+import { Config } from '../index';
 
 // === 配置路径 ===
 let inputDir = "";
@@ -110,7 +111,7 @@ async function generateThumbnails(ctx: Context, options: {
  * @param {string} options.outputDir - 输出目录
  * @returns {string} 输出目录路径
  */
-function prepareRenderMix(ctx: Context, useColorNames, options: {
+function prepareRenderMix(ctx: Context,config:Config, useColorNames, options: {
   colorDir?: string;
   grayDir?: string;
   outputDir?: string;
@@ -129,7 +130,7 @@ function prepareRenderMix(ctx: Context, useColorNames, options: {
   const grayFiles = fs.readdirSync(grayOutDir);
 
   for (const file of grayFiles) {
-    const baseName = path.parse(file).name;
+    const baseName = path.parse(file).name.split(config.wifeNameSeparator)[0];
 
     const isColor = useColorNames.includes(baseName);
     const source = isColor
@@ -157,7 +158,7 @@ function prepareRenderMix(ctx: Context, useColorNames, options: {
  * @param {number} options.padding - 图片间距
  * @returns {Promise<string>} 输出文件路径
  */
-async function generateMixedBackgroundImage(ctx: Context, colorImageNames, options: {
+async function generateMixedBackgroundImage(ctx: Context, config:Config, colorImageNames, options: {
   backgroundPath?: string;
   colorDir?: string;
   grayDir?: string;
@@ -176,7 +177,7 @@ async function generateMixedBackgroundImage(ctx: Context, colorImageNames, optio
   } = options;
 
   // 准备混合渲染目录
-  const mixDir = prepareRenderMix(ctx, colorImageNames, {
+  const mixDir = prepareRenderMix(ctx, config, colorImageNames, {
     colorDir: colDir,
     grayDir: grayOutDir,
     outputDir: renderMixDir
