@@ -20,6 +20,13 @@ export interface WifeUser {
         affection: number;
         affectionLevel: number;
     }>;
+    interactionWithOtherUser: Array<{
+        otherUserId: string;
+        groupId: string;
+        ntrCount: number;
+        ntrSuccessCount: number;
+        exchangeCount: number;
+    }>;
     createdAt: Date;
     ntrCount: number;
     ntrTotalCount: number;

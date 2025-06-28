@@ -2,6 +2,7 @@ import { Context, Schema } from "koishi";
 export declare const name = "wifegacha";
 export declare const inject: string[];
 export interface Config {
+    blockGroup: string[];
     ntrOrdinal: number;
     probabilityMath: number;
     ntrSwitchgear: boolean;

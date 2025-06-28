@@ -4,6 +4,9 @@ import utils from "../utils";
 
 export function nlp(ctx: Context, config: Config) {
   ctx.command("牛老婆 <userId> 牛指定群友老婆").action(async ({ session }, userId) => {
+    if (ctx.config.blockGroup.includes(session.channelId.toString())) {
+      return;
+    }
     if(!config.ntrSwitchgear){
       session.send([h("quote", { id: session.messageId }), "牛老婆功能未开启，请联系管理员"]);
       return;
@@ -27,6 +30,8 @@ export function nlp(ctx: Context, config: Config) {
     await utils.createTarget(ctx, session, userId)
     // 创建用户数据
     await utils.createUserData(ctx, session)
+    // 创建目标用户与当前用户交互数据
+    await utils.createInteraction(ctx, session, userId);
     // 创建群数据
     await utils.createGroupData(ctx, session)
     // 获取用户数据
@@ -54,6 +59,15 @@ export function nlp(ctx: Context, config: Config) {
       ntrCount: myUserData.ntrCount + 1,
       ntrTotalCount: myUserData.ntrTotalCount + 1,
     })
+    // 更新目标用户与当前用户交互数据
+    ctx.database.set("wifeUser", { userId: session.userId, groupId: session.channelId.toString() }, {
+      interactionWithOtherUser: myUserData.interactionWithOtherUser.map(item => {
+        if(item.otherUserId === userId && item.groupId === session.channelId.toString()){
+          item.ntrCount += 1;
+        }
+        return item;
+      }),
+    });
     // 更新目标用户被牛次数
     ctx.database.set("wifeUser", { userId, groupId: session.channelId.toString() }, {
       targetNtrCount: targetUserData.targetNtrCount + 1,
@@ -113,6 +127,15 @@ export function nlp(ctx: Context, config: Config) {
         ntrSuccessCount: myUserData.ntrSuccessCount + 1,
         wifeHistories: myUserData.wifeHistories,
       })
+      // 更新目标用户与当前用户交互数据
+    ctx.database.set("wifeUser", { userId: session.userId, groupId: session.channelId.toString() }, {
+      interactionWithOtherUser: myUserData.interactionWithOtherUser.map(item => {
+        if(item.otherUserId === userId && item.groupId === session.channelId.toString()){
+          item.ntrSuccessCount += 1;
+        }
+        return item;
+      }),
+    });
       // 更新目标用户数据
       ctx.database.set("wifeUser", { userId, groupId: session.channelId.toString() }, {
         wifeName: '',

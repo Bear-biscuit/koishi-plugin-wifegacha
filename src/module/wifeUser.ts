@@ -39,6 +39,19 @@ export interface WifeUser {
     // 好感等级
     affectionLevel: number;
   }>;
+  // 与其他用户交互统计
+  interactionWithOtherUser: Array<{
+    // 其他用户ID
+    otherUserId: string;
+    // 群号
+    groupId: string;
+    // 牛老婆次数
+    ntrCount: number;
+    // 牛老婆成功次数
+    ntrSuccessCount: number;
+    // 交换老婆次数
+    exchangeCount: number;
+  }>;
   // 创建时间
   createdAt: Date;
   // 牛老婆次数
@@ -80,6 +93,7 @@ export function wifeUser(ctx: Context, config: Config) {
     lpdaDate: "timestamp",
     drawWifeDate: "timestamp",
     wifeHistories: "json",
+    interactionWithOtherUser: "json",
     createdAt: "timestamp",
     ntrCount: "integer",
     ntrTotalCount: "integer",

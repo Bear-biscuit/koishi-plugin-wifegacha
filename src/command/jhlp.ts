@@ -110,14 +110,36 @@ async function exchangeWife(ctx: Context,session: Session, myId: string, userId:
       exchangeCount: targetUserData.exchangeCount + 1,
     }
   );
+  // 更新目标用户与当前用户交互数据
+  ctx.database.set("wifeUser", { userId: myId, groupId: session.channelId.toString() }, {
+    interactionWithOtherUser: userData.interactionWithOtherUser.map(item => {
+      if(item.otherUserId === userId && item.groupId === session.channelId.toString()){
+        item.exchangeCount += 1;
+      }
+      return item;
+    }),
+  });
+  ctx.database.set("wifeUser", { userId: userId, groupId: session.channelId.toString() }, {
+    interactionWithOtherUser: targetUserData.interactionWithOtherUser.map(item => {
+      if(item.otherUserId === myId && item.groupId === session.channelId.toString()){
+        item.exchangeCount += 1;
+      }
+      return item;
+    }),
+  });
 }
 
 export function jhlp(ctx: Context) {
   ctx.command("交换老婆 <userId> 和指定群友交换老婆").action(async ({ session }, userId) => {
+    if (ctx.config.blockGroup.includes(session.channelId.toString())) {
+      return;
+    }
     userId = session.content.match(/<at id="(\d+)"\s*\/>/)?.[1];
     const myId = session.userId;
     // 创建用户数据
     await utils.createUserData(ctx, session);
+    // 创建目标用户与当前用户交互数据
+    await utils.createInteraction(ctx, session, userId);
     // 创建群数据
     await utils.createGroupData(ctx, session);
     // 创建目标用户数据

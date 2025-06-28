@@ -22,6 +22,9 @@ export function rlp(ctx: Context,config: Config) {
 
   ctx.command("日老婆 增加老婆好感度")
   .action(async ({ session }) => {
+    if (ctx.config.blockGroup.includes(session.channelId.toString())) {
+      return;
+    }
     if(!config.fuckWifeSwitchgear){
       session.send([h("quote", { id: session.messageId }), "日老婆功能未开启，请联系管理员"]);
       return;

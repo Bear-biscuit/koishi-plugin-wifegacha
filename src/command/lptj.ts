@@ -5,6 +5,9 @@ import utils from "../utils";
 
 export function lptj(ctx: Context, config: Config) {
   ctx.command("老婆图鉴 [targetUserId] 查看老婆图鉴").action(async ({ session }, targetUserId) => {
+    if (ctx.config.blockGroup.includes(session.channelId.toString())) {
+      return;
+    }
     let userId = session.userId;
     if(targetUserId){
       userId = targetUserId.match(/<at id="(\d+)"\s*\/>/)?.[1];

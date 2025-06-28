@@ -7,6 +7,7 @@ import { affectionLevel } from "./affectionLevel";
 import { getRandomWavFile } from "./getWavFlieName";
 import { createWifeData } from "./createWifeData";
 import { upWifeData } from "./upWifeData";
+import { createInteraction } from "./createInteraction";
 declare const _default: {
     createUserData: typeof createUserData;
     createGroupData: typeof createGroupData;
@@ -39,5 +40,6 @@ declare const _default: {
             padding?: number;
         }) => Promise<Buffer<ArrayBufferLike>>;
     };
+    createInteraction: typeof createInteraction;
 };
 export default _default;

@@ -4,6 +4,9 @@ import utils from "../utils";
 
 export function chalp(ctx: Context) {
   ctx.command("查老婆 [userId] 查看个人老婆或指定群友老婆").action(async ({ session }, userId) => {
+    if (ctx.config.blockGroup.includes(session.channelId.toString())) {
+      return;
+    }
    if (userId){
     await utils.createTarget(ctx, session, userId?.match(/<at id="(\d+)"\s*\/>/)?.[1])
     const targetData = (await ctx.database.get("wifeUser", {

@@ -18,6 +18,7 @@ export async function createTarget(ctx: Context, session: Session, userId: strin
       userId: userId,
       groupId: session.channelId.toString(),
       wifeHistories: [],
+      interactionWithOtherUser: [],
       ntrOrdinal: 0,
       createdAt: new Date(),
       ntrCount: 0,

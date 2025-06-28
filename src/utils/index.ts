@@ -8,6 +8,7 @@ import { getRandomWavFile } from "./getWavFlieName";
 import { createWifeData } from "./createWifeData";
 import sprit from "./sprit";
 import { upWifeData } from "./upWifeData";
+import { createInteraction } from "./createInteraction";
 export default {
   createUserData,
   createGroupData,
@@ -18,5 +19,6 @@ export default {
   getRandomWavFile,
   createWifeData,
   upWifeData,
-  sprit
+  sprit,
+  createInteraction
 }

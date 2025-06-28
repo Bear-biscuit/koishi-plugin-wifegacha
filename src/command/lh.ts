@@ -4,6 +4,9 @@ import utils from "../utils";
 
 export function lh(ctx: Context, config: Config) {
   ctx.command("离婚 解除婚姻关系").action(async ({ session }) => {
+    if (ctx.config.blockGroup.includes(session.channelId.toString())) {
+      return;
+    }
     if(!config.divorceSwitchgear){
       session.send([h("quote", { id: session.messageId }), "离婚功能未开启，请联系管理员"]);
       return;

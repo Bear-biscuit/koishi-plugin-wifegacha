@@ -11,6 +11,8 @@ export const name = "wifegacha";
 export const inject = ["database"];
 
 export interface Config {
+  // 屏蔽的群组
+  blockGroup: string[];
   // 牛老婆次数
   ntrOrdinal: number;
   // 牛老婆概率
@@ -54,6 +56,10 @@ export const Config: Schema<Config> = Schema.intersect([
     wifeNameSeparator: Schema.string().default("+").description("老婆'名称' '来源'分隔符"),
     adminId: Schema.string().required().description("管理员ID"),
     lpdaDateInterval: Schema.number().default(10).description("档案查询时间间隔(秒)"),
+    blockGroup: Schema.array(Schema.string())
+      .default([])
+      .collapse()
+      .description("屏蔽的群组"),
   }).description("基础设置"),
   Schema.object({
     ntrOrdinal: Schema.number().default(5).description("牛老婆次数"),

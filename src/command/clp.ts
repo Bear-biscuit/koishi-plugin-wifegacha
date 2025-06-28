@@ -4,6 +4,9 @@ import utils from "../utils";
 
 export function clp(ctx: Context) {
   ctx.command("抽老婆 抽一个老婆").action(async ({ session }) => {
+    if (ctx.config.blockGroup.includes(session.channelId.toString())) {
+      return;
+    }
     // 创建用户数据
     await utils.createUserData(ctx, session)
     // 创建群数据
