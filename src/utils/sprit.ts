@@ -26,9 +26,9 @@ if (path.join(__dirname).split("\\").pop()=="utils"){
 }
 let backgroundImagePath = "";
 if (path.join(__dirname).split("\\").pop()=="utils"){
-  backgroundImagePath = path.join(__dirname, '../../../..', 'data/assets/bj.png');
+  backgroundImagePath = path.join(__dirname, 'bj.png');
 }else{
-  backgroundImagePath = path.join(__dirname, '../../..', 'data/assets/bj.png');
+  backgroundImagePath = path.join(__dirname, 'bj.png');
 }
 
 // === 初始化目录 ===

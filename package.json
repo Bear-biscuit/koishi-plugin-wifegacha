@@ -1,6 +1,6 @@
 {
   "name": "koishi-plugin-wifegacha",
-  "description": "抽老婆,Hoshinbot-抽老婆插件的重制版",
+  "description": "抽老婆，详情请查看[readme.md](https://github.com/Bear-biscuit/koishi-plugin-wifegacha/blob/main/README.md)",
   "version": "1.0.0",
   "main": "lib/index.js",
   "contributors": [
@@ -22,7 +22,9 @@
     "wife",
     "koishi",
     "plugin",
-    "wifegacha"
+    "wifegacha",
+    "chatbot",
+    "抽老婆"
   ],
   "devDependencies": {},
   "peerDependencies": {

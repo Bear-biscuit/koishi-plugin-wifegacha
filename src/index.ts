@@ -104,7 +104,6 @@ export const Config: Schema<Config> = Schema.intersect([
 ]);
 
 const wifegachaPath = path.join(__dirname, "../../..", "data/assets/wifegacha");
-const wifegachaVoicePath = path.join(__dirname, "../../..", "data/assets/wifeVoice");
 
 export async function apply(ctx: Context, config: Config) {
   await module(ctx, config);
@@ -116,11 +115,6 @@ export async function apply(ctx: Context, config: Config) {
   if (!existsSync(wifegachaPath)) {
     ctx.logger.info("wifegacha文件夹不存在,开始初始化");
     mkdirSync(wifegachaPath);
-  }
-  // 初始化老婆语音文件夹
-  if (!existsSync(wifegachaVoicePath)) {
-    ctx.logger.info("wifeVoice文件夹不存在,开始初始化");
-    mkdirSync(wifegachaVoicePath);
   }
   // 初始化老婆数据
   if ((await ctx.database.get("wifeData", {})).length === 0) {

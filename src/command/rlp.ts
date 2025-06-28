@@ -10,14 +10,13 @@ export function rlp(ctx: Context,config: Config) {
   if (path.join(__dirname).split("\\").pop()=="command"){
     wifegachaPath = path.join(
       __dirname,
-      "../../../..",
-      "data/assets/wifeVoice"
+      "../",
+      "wifeVoice"
     );
   }else{
     wifegachaPath = path.join(
       __dirname,
-      "../../..",
-      "data/assets/wifeVoice"
+      "wifeVoice"
     );
   }
 
