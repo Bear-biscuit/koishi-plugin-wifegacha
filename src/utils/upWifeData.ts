@@ -33,10 +33,16 @@ export async function upWifeData(ctx: Context,config:Config) {
     const comeFrom = parsed.name.split(splitName)[1]
     // 判断老婆数据是否存在
     if(wifeData.find(item => item.name === wifeName)){
+      // 更新老婆数据
+      await ctx.database.set('wifeData', { name: wifeName }, {
+        comeFrom: comeFrom,
+        filepath: path.join(wifegachaPath, file),
+      })
       continue;
     }
+    ctx.logger.info("创建老婆数据",wifeName)
     // 创建老婆数据
-    ctx.database.create('wifeData', {
+    await ctx.database.create('wifeData', {
       name: wifeName,
       comeFrom: comeFrom,
       filepath: path.join(wifegachaPath, file),
@@ -44,10 +50,13 @@ export async function upWifeData(ctx: Context,config:Config) {
       groupData: []
     })
   }
+  const wifeNewData = await ctx.database.get("wifeData", {})
   // 遍历老婆数据，如果老婆数据不存在，则删除
-  for (const item of wifeData) {
-    if(!files.includes(item.name)){
-      ctx.database.remove('wifeData', { name: item.name })
+  for (const item of wifeNewData) {
+    const fileNameList = files.map(file => path.parse(file).name.split(config.wifeNameSeparator)[0])
+    if(!fileNameList.includes(item.name)){
+      ctx.logger.info("删除老婆数据",item.name+config.wifeNameSeparator+item.comeFrom)
+      await ctx.database.remove('wifeData', { name: item.name })
     }
   }
   ctx.logger.info('wifeData表更新完成')
