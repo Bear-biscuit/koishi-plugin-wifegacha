@@ -34,7 +34,6 @@ declare const _default: {
             backgroundPath?: string;
             colorDir?: string;
             grayDir?: string;
-            outputPath?: string;
             imageSize?: number;
             gridWidth?: number;
             padding?: number;

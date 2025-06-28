@@ -103,66 +103,21 @@ async function generateThumbnails(ctx: Context, options: {
 }
 
 /**
- * 准备混合渲染目录（灰度为主，指定图片使用彩色）
- * @param {string[]} useColorNames - 需要使用彩色版本的图片名称数组
- * @param {Object} options - 配置选项
- * @param {string} options.colorDir - 彩色图片目录
- * @param {string} options.grayDir - 灰度图片目录
- * @param {string} options.outputDir - 输出目录
- * @returns {string} 输出目录路径
- */
-function prepareRenderMix(ctx: Context,config:Config, useColorNames, options: {
-  colorDir?: string;
-  grayDir?: string;
-  outputDir?: string;
-} = {}) {
-  const {
-    colorDir: colDir = colorDir,
-    grayDir: grayOutDir = grayDir,
-    outputDir: outDir = renderMixDir
-  } = options;
-
-  if (!fs.existsSync(outDir)) fs.mkdirSync(outDir, { recursive: true });
-
-  // 清空输出目录
-  fs.readdirSync(outDir).forEach(file => fs.unlinkSync(path.join(outDir, file)));
-
-  const grayFiles = fs.readdirSync(grayOutDir);
-
-  for (const file of grayFiles) {
-    const baseName = path.parse(file).name.split(config.wifeNameSeparator)[0];
-
-    const isColor = useColorNames.includes(baseName);
-    const source = isColor
-      ? path.join(colDir, file)
-      : path.join(grayOutDir, file);
-
-    const dest = path.join(outDir, file);
-    fs.copyFileSync(source, dest);
-  }
-
-  ctx.logger.info(`✅ ${outDir} 目录已准备（彩色混入灰度）`);
-  return outDir;
-}
-
-/**
  * 生成带背景混合图
  * @param {string[]} colorImageNames - 需要使用彩色版本的图片名称数组
  * @param {Object} options - 配置选项
  * @param {string} options.backgroundPath - 背景图片路径
  * @param {string} options.colorDir - 彩色图片目录
  * @param {string} options.grayDir - 灰度图片目录
- * @param {string} options.outputPath - 输出文件路径
  * @param {number} options.imageSize - 图片大小
  * @param {number} options.gridWidth - 网格宽度
  * @param {number} options.padding - 图片间距
- * @returns {Promise<string>} 输出文件路径
+ * @returns {Promise<Buffer>} 输出图片的Buffer
  */
 async function generateMixedBackgroundImage(ctx: Context, config:Config, colorImageNames, options: {
   backgroundPath?: string;
   colorDir?: string;
   grayDir?: string;
-  outputPath?: string;
   imageSize?: number;
   gridWidth?: number;
   padding?: number;
@@ -176,29 +131,30 @@ async function generateMixedBackgroundImage(ctx: Context, config:Config, colorIm
     padding = 5
   } = options;
 
-  // 准备混合渲染目录
-  const mixDir = prepareRenderMix(ctx, config, colorImageNames, {
-    colorDir: colDir,
-    grayDir: grayOutDir,
-    outputDir: renderMixDir
-  });
-
-  // 渲染到背景图上
-  const thumbs = fs.readdirSync(mixDir).filter(f => /\.(png|jpe?g)$/i.test(f));
-  const cols = Math.floor(gridWidth / (imageSize + padding));
-  const rows = Math.ceil(thumbs.length / cols);
-  const totalHeight = rows * (imageSize + padding) + 20 - padding;
+  // 获取所有图片文件
+  const grayFiles = fs.readdirSync(grayOutDir).filter(f => /\.(png|jpe?g)$/i.test(f));
+  const thumbFiles = [...grayFiles]; // 复制文件列表用于后续处理
 
   const composites = [];
+  const cols = Math.floor(gridWidth / (imageSize + padding));
+  const rows = Math.ceil(thumbFiles.length / cols);
+  const totalHeight = rows * (imageSize + padding) + 20 - padding;
 
-  for (let i = 0; i < thumbs.length; i++) {
-    const file = thumbs[i];
-    const imgPath = path.join(mixDir, file);
+  // 处理每一个图片，决定使用彩色还是灰度
+  for (let i = 0; i < thumbFiles.length; i++) {
+    const file = thumbFiles[i];
+    const baseName = path.parse(file).name.split(config.wifeNameSeparator)[0];
+    const isColor = colorImageNames.includes(baseName);
+
+    // 选择使用彩色还是灰度图片
+    const imgPath = isColor
+      ? path.join(colDir, file)
+      : path.join(grayOutDir, file);
 
     const row = Math.floor(i / cols);
     const col = i % cols;
 
-    const itemsInRow = (row === rows - 1 && thumbs.length % cols !== 0) ? thumbs.length % cols : cols;
+    const itemsInRow = (row === rows - 1 && thumbFiles.length % cols !== 0) ? thumbFiles.length % cols : cols;
     const rowWidth = itemsInRow * imageSize + (itemsInRow - 1) * padding;
     const offsetX = Math.floor((gridWidth - rowWidth) / 2);
     const x = col * (imageSize + padding) + offsetX;
@@ -211,7 +167,7 @@ async function generateMixedBackgroundImage(ctx: Context, config:Config, colorIm
     .resize({ width: gridWidth, height: totalHeight })
     .toBuffer();
 
-  // 不生成文件，直接返回图片的二进制数据
+  // 直接返回图片的二进制数据
   const imageBuffer = await sharp(bgResized)
     .composite(composites)
     .jpeg({ quality: 75 })

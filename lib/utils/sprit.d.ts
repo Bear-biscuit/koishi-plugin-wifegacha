@@ -29,17 +29,15 @@ declare function generateThumbnails(ctx: Context, options?: {
  * @param {string} options.backgroundPath - 背景图片路径
  * @param {string} options.colorDir - 彩色图片目录
  * @param {string} options.grayDir - 灰度图片目录
- * @param {string} options.outputPath - 输出文件路径
  * @param {number} options.imageSize - 图片大小
  * @param {number} options.gridWidth - 网格宽度
  * @param {number} options.padding - 图片间距
- * @returns {Promise<string>} 输出文件路径
+ * @returns {Promise<Buffer>} 输出图片的Buffer
  */
 declare function generateMixedBackgroundImage(ctx: Context, config: Config, colorImageNames: any, options?: {
     backgroundPath?: string;
     colorDir?: string;
     grayDir?: string;
-    outputPath?: string;
     imageSize?: number;
     gridWidth?: number;
     padding?: number;
