@@ -27,6 +27,7 @@
 ## 📌 注意
 
 ⚠️ 当前插件仍在开发中，功能、命令可能会有变化。请关注更新。
+
 ❤️ 功能设计完全来源于[WifeGacha](https://github.com/Rlezzo/WifeGacha/tree/master)
 
 ---
