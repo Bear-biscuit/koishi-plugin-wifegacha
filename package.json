@@ -3,6 +3,14 @@
   "description": "抽老婆,Hoshinbot-抽老婆插件的重制版",
   "version": "1.0.0",
   "main": "lib/index.js",
+  "contributors": [
+    "Bocchi2b <bocchi2b@qq.com>"
+  ],
+  "homepage": "https://github.com/Bear-biscuit/koishi-plugin-wifegacha",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Bear-biscuit/koishi-plugin-wifegacha.git"
+  },
   "typings": "lib/index.d.ts",
   "files": [
     "lib",
@@ -11,9 +19,10 @@
   "license": "MIT",
   "scripts": {},
   "keywords": [
-    "chatbot",
+    "wife",
     "koishi",
-    "plugin"
+    "plugin",
+    "wifegacha"
   ],
   "devDependencies": {},
   "peerDependencies": {
