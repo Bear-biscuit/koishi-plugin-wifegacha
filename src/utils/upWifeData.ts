@@ -44,6 +44,12 @@ export async function upWifeData(ctx: Context,config:Config) {
       groupData: []
     })
   }
+  // 遍历老婆数据，如果老婆数据不存在，则删除
+  for (const item of wifeData) {
+    if(!files.includes(item.name)){
+      ctx.database.remove('wifeData', { name: item.name })
+    }
+  }
   ctx.logger.info('wifeData表更新完成')
   sprit.generateThumbnails(ctx)
 
