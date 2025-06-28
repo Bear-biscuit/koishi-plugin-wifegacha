@@ -1,0 +1,23 @@
+{
+  "name": "koishi-plugin-wifegacha",
+  "description": "抽老婆,Hoshinbot-抽老婆插件的重制版",
+  "version": "1.0.0",
+  "main": "lib/index.js",
+  "typings": "lib/index.d.ts",
+  "files": [
+    "lib",
+    "dist"
+  ],
+  "license": "MIT",
+  "scripts": {},
+  "keywords": [
+    "chatbot",
+    "koishi",
+    "plugin"
+  ],
+  "devDependencies": {},
+  "peerDependencies": {
+    "koishi": "^4.18.7",
+    "sharp": "^0.34.2"
+  }
+}
