@@ -51,6 +51,8 @@ export function tjlp(ctx: Context,config:Config) {
         name: name.split(config.wifeNameSeparator)[1],
         comeFrom: name.split(config.wifeNameSeparator)[0],
         filepath: path.join(wifegachaPath, `${name}.png`),
+        createdAt: new Date(),
+        groupData: []
       });
       session.send([
         h("quote", { id: session.messageId }),
