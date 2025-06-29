@@ -26,9 +26,8 @@
 
 ## ⭐ 使用前准备
 
-- 先启动一次创建所需目录
-- 在``data/assets/wifegacha/``目录中存放老婆图片。
 - 下载[老婆包](https://github.com/Bear-biscuit/koishi-plugin-wifegacha/releases)
+- 放在``data/assets/wifegacha/``目录中。
 - 命名规则[来源]+[名称]
 ```
 wifegacha/
