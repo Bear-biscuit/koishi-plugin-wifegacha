@@ -8,6 +8,7 @@ import { getRandomWavFile } from "./getWavFlieName";
 import { createWifeData } from "./createWifeData";
 import { upWifeData } from "./upWifeData";
 import { createInteraction } from "./createInteraction";
+import readImageAsBinarySync from "./readImageAsBinarySync";
 declare const _default: {
     createUserData: typeof createUserData;
     createGroupData: typeof createGroupData;
@@ -41,5 +42,6 @@ declare const _default: {
         }) => Promise<Buffer<ArrayBufferLike>>;
     };
     createInteraction: typeof createInteraction;
+    readImageAsBinarySync: typeof readImageAsBinarySync;
 };
 export default _default;

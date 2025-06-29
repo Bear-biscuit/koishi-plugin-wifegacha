@@ -9,6 +9,7 @@ import { createWifeData } from "./createWifeData";
 import sprit from "./sprit";
 import { upWifeData } from "./upWifeData";
 import { createInteraction } from "./createInteraction";
+import readImageAsBinarySync from "./readImageAsBinarySync";
 export default {
   createUserData,
   createGroupData,
@@ -20,5 +21,6 @@ export default {
   createWifeData,
   upWifeData,
   sprit,
-  createInteraction
+  createInteraction,
+  readImageAsBinarySync
 }

@@ -115,6 +115,7 @@ export function clp(ctx: Context) {
       )[0].comeFrom;
 
       if (found) {
+        const imageBuffer = await utils.readImageAsBinarySync(wifeImage);
         // 如果找到，说明是重复抽到
         session.send([
           h("quote", { id: session.messageId }),
@@ -126,16 +127,17 @@ export function clp(ctx: Context) {
               ?.getWifeDate.toLocaleString()
               .split("T")[0]
           }`,
-          h.image(pathToFileURL(wifeImage).href),
+          h.image(imageBuffer, "image/png"),
         ]);
       } else {
         // 如果没找到，说明是第一次抽到
+        const imageBuffer = await utils.readImageAsBinarySync(wifeImage);
         session.send([
           h("quote", { id: session.messageId }),
           `出新了！\n你今天抽到的老婆是:${wifeName}${
             comeFrom ? `\n来自《${comeFrom}》` : ""
           }`,
-          h.image(pathToFileURL(wifeImage).href),
+          h.image(imageBuffer, "image/png"),
         ]);
       }
     } else {
@@ -147,12 +149,13 @@ export function clp(ctx: Context) {
         const comeFrom = (
           await ctx.database.get("wifeData", { name: userData.wifeName })
         )[0].comeFrom;
+        const imageBuffer = await utils.readImageAsBinarySync(wifeImage);
         session.send([
           h("quote", { id: session.messageId }),
           `你的老婆是 ${userData.wifeName} ${
             comeFrom ? `，来自《${comeFrom}》` : ""
           }`,
-          h.image(pathToFileURL(wifeImage).href),
+          h.image(imageBuffer, "image/png"),
         ]);
       } else {
         // 更新群数据

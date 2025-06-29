@@ -117,11 +117,12 @@ export function lpda(ctx: Context, config: Config) {
                 (item) => item.wifeName === wifeName
               )
             ) {
+              const imageBuffer = await utils.readImageAsBinarySync(wife.filepath);
               session.send([
                 h("quote", { id: session.messageId }),
                 `名字：${wife.name}\n`,
                 `${wife.comeFrom ? `来自：${wife.comeFrom}\n` : ""}`,
-                h.image(pathToFileURL(wife.filepath).href),
+                h.image(imageBuffer, "image/png"),
                 `${
                   wifeUser[0].wifeHistories.find(
                     (item) => item.wifeName === wifeName
@@ -269,11 +270,12 @@ export function lpda(ctx: Context, config: Config) {
                 }`,
               ]);
             } else {
+              const imageBuffer = await utils.readImageAsBinarySync(wife.filepath);
               session.send([
                 h("quote", { id: session.messageId }),
                 `名字：${wife.name}\n`,
                 `${wife.comeFrom ? `来自：${wife.comeFrom}\n` : ""}`,
-                h.image(pathToFileURL(wife.filepath).href),
+                h.image(imageBuffer, "image/png"),
                 `${wife.groupData.find(
                   (item) => item.groupId === session.channelId.toString()
                 )?.drawCount ? `- 本群一共抽到${

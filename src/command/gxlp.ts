@@ -3,6 +3,7 @@ import { writeFileSync, unlinkSync } from "fs";
 import path from "path";
 import { pathToFileURL } from "url";
 import { Config } from "../index";
+import utils from "../utils";
 
 export function gxlp(ctx: Context,config:Config) {
   let wifegachaPath = "";
@@ -49,10 +50,11 @@ export function gxlp(ctx: Context,config:Config) {
         comeFrom: wifeComeFrom,
         filepath: path.join(wifegachaPath, `${wifeComeFrom?wifeComeFrom+config.wifeNameSeparator:''}${name}.png`),
       });
+      const imageBuffer = await utils.readImageAsBinarySync(path.join(wifegachaPath, `${wifeComeFrom?wifeComeFrom+config.wifeNameSeparator:''}${name}.png`));
       session.send([
         h("quote", { id: session.messageId }),
         "老婆更新成功",
-        h.image(pathToFileURL(path.join(wifegachaPath, `${wifeComeFrom?wifeComeFrom+config.wifeNameSeparator:''}${name}.png`)).href),
+        h.image(imageBuffer, "image/png"),
       ]);
     });
 }

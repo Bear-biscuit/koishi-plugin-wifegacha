@@ -3,6 +3,7 @@ import { renameSync } from "fs";
 import path from "path";
 import { pathToFileURL } from "url";
 import { Config } from "../index";
+import utils from "../utils";
 
 export function cmmlp(ctx: Context,config:Config) {
   let wifegachaPath = "";
@@ -46,10 +47,11 @@ export function cmmlp(ctx: Context,config:Config) {
         comeFrom: newName.split(config.wifeNameSeparator)[0],
         filepath: path.join(wifegachaPath, `${newName}.png`),
       });
+      const imageBuffer = await utils.readImageAsBinarySync(path.join(wifegachaPath, `${newName}.png`));
       session.send([
         h("quote", { id: session.messageId }),
         "老婆更新成功",
-        h.image(pathToFileURL(path.join(wifegachaPath, `${newName}.png`)).href),
+        h.image(imageBuffer, "image/png"),
       ]);
     });
 }

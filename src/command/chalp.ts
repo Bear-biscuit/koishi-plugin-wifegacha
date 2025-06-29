@@ -21,12 +21,13 @@ export function chalp(ctx: Context) {
       ]);
     }
     else {
+      const imageBuffer = await utils.readImageAsBinarySync((await ctx.database.get("wifeData", { name: targetData.wifeName }))[0].filepath);
       session.send([
         h("quote", { id: session.messageId }),
         `对方的老婆是 ${targetData.wifeName} ${
           (await ctx.database.get("wifeData", { name: targetData.wifeName }))[0].comeFrom ? `，来自《${(await ctx.database.get("wifeData", { name: targetData.wifeName }))[0].comeFrom}》` : ""
         }`,
-        h.image(pathToFileURL((await ctx.database.get("wifeData", { name: targetData.wifeName }))[0].filepath).href),
+        h.image(imageBuffer, "image/png"),
       ]);
     }
    }

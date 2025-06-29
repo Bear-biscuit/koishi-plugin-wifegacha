@@ -3,6 +3,7 @@ import { writeFileSync } from "fs";
 import path from "path";
 import { pathToFileURL } from "url";
 import { Config } from "../index";
+import utils from "../utils";
 
 export function tjlp(ctx: Context,config:Config) {
   let wifegachaPath = "";
@@ -54,10 +55,11 @@ export function tjlp(ctx: Context,config:Config) {
         createdAt: new Date(),
         groupData: []
       });
+      const imageBuffer = await utils.readImageAsBinarySync(path.join(wifegachaPath, `${name}.png`));
       session.send([
         h("quote", { id: session.messageId }),
         "老婆添加成功",
-        h.image(pathToFileURL(path.join(wifegachaPath, `${name}.png`)).href),
+        h.image(imageBuffer, "image/png"),
       ]);
     });
 }
