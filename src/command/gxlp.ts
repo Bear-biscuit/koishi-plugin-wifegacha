@@ -27,14 +27,11 @@ export function gxlp(ctx: Context,config:Config) {
       }
       if (!name || !image)
         return [h("quote", { id: session.messageId }), "缺少参数"];
-      if(name.split(config.wifeNameSeparator).length<2){
-        return [h("quote", { id: session.messageId }), "老婆名称格式错误,请使用" + config.wifeNameSeparator + "分隔名称和来源"];
-      }
       if(!image.includes("<img src=")){
         return [h("quote", { id: session.messageId }), "未检测到图片"];
       }
       const wifeData = (
-        await ctx.database.get("wifeData", {name: name.split(config.wifeNameSeparator)[0]})
+        await ctx.database.get("wifeData", {name: name})
       )
       if(wifeData.length === 0){
         return [h("quote", { id: session.messageId }), "该老婆不存在，请使用添加老婆命令"];
@@ -42,19 +39,20 @@ export function gxlp(ctx: Context,config:Config) {
       const wifeImageData = await ctx.http.get(
         image.match(/<img\s+src="([^"]+)"/)?.[1].replaceAll("&amp;", "&")
       );
+      const wifeComeFrom = wifeData[0].comeFrom
       const buffer = Buffer.from(wifeImageData);
       unlinkSync(wifeData[0].filepath);
-      writeFileSync(path.join(wifegachaPath, `${name}.png`), buffer);
+      writeFileSync(path.join(wifegachaPath, `${wifeComeFrom?wifeComeFrom+config.wifeNameSeparator:''}${name}.png`), buffer);
       await ctx.database.set("wifeData",{
-        name: name.split(config.wifeNameSeparator)[0]
+        name: name
       }, {
-        comeFrom: name.split(config.wifeNameSeparator)[1],
-        filepath: path.join(wifegachaPath, `${name}.png`),
+        comeFrom: wifeComeFrom,
+        filepath: path.join(wifegachaPath, `${wifeComeFrom?wifeComeFrom+config.wifeNameSeparator:''}${name}.png`),
       });
       session.send([
         h("quote", { id: session.messageId }),
         "老婆更新成功",
-        h.image(pathToFileURL(path.join(wifegachaPath, `${name}.png`)).href),
+        h.image(pathToFileURL(path.join(wifegachaPath, `${wifeComeFrom?wifeComeFrom+config.wifeNameSeparator:''}${name}.png`)).href),
       ]);
     });
 }

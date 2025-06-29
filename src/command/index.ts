@@ -11,6 +11,7 @@ import {gxlp} from "./gxlp";
 import {lpda} from "./lpda";
 import {yhda} from "./yhda";
 import {gxlpsj} from "./gxlpsj";
+import {cmmlp} from "./cmmlp";
 export default {
     clp,
     nlp,
@@ -25,4 +26,5 @@ export default {
     lpda,
     yhda,
     gxlpsj,
+    cmmlp,
 }

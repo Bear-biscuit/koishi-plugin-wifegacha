@@ -26,8 +26,8 @@ export function createWifeData(ctx: Context,config:Config) {
     // 使用 path.parse 拆解文件名
     const parsed = path.parse(file);
     const splitName = config.wifeNameSeparator
-    const wifeName = parsed.name.split(splitName)[0]
-    const comeFrom = parsed.name.split(splitName)[1]
+    const wifeName = parsed.name.split(splitName)[1]
+    const comeFrom = parsed.name.split(splitName)[0]
     ctx.database.create('wifeData', {
       name: wifeName,
       comeFrom: comeFrom,

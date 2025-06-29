@@ -31,7 +31,7 @@ export function tjlp(ctx: Context,config:Config) {
       if (!name || !image)
         return [h("quote", { id: session.messageId }), "缺少参数"];
       if(name.split(config.wifeNameSeparator).length<2){
-        return [h("quote", { id: session.messageId }), "老婆名称格式错误,请使用" + config.wifeNameSeparator + "分隔名称和来源"];
+        return [h("quote", { id: session.messageId }), "老婆名称格式错误,请使用" + config.wifeNameSeparator + "分隔来源和名称"];
       }
       if(!image.includes("<img src=")){
         return [h("quote", { id: session.messageId }), "未检测到图片"];
@@ -39,7 +39,7 @@ export function tjlp(ctx: Context,config:Config) {
       const wifeNameList = (
         await ctx.database.get("wifeData", {})
       ).map(item => item.name)
-      if(wifeNameList.includes(name.split(config.wifeNameSeparator)[0])){
+      if(wifeNameList.includes(name.split(config.wifeNameSeparator)[1])){
         return [h("quote", { id: session.messageId }), "该老婆已存在，请使用更新老婆命令"];
       }
       const wifeImageData = await ctx.http.get(
@@ -48,8 +48,8 @@ export function tjlp(ctx: Context,config:Config) {
       const buffer = Buffer.from(wifeImageData);
       writeFileSync(path.join(wifegachaPath, `${name}.png`), buffer);
       await ctx.database.create("wifeData",{
-        name: name.split(config.wifeNameSeparator)[0],
-        comeFrom: name.split(config.wifeNameSeparator)[1],
+        name: name.split(config.wifeNameSeparator)[1],
+        comeFrom: name.split(config.wifeNameSeparator)[0],
         filepath: path.join(wifegachaPath, `${name}.png`),
       });
       session.send([

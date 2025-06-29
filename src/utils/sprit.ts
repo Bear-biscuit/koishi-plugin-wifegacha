@@ -143,7 +143,7 @@ async function generateMixedBackgroundImage(ctx: Context, config:Config, colorIm
   // 处理每一个图片，决定使用彩色还是灰度
   for (let i = 0; i < thumbFiles.length; i++) {
     const file = thumbFiles[i];
-    const baseName = path.parse(file).name.split(config.wifeNameSeparator)[0];
+    const baseName = path.parse(file).name.split(config.wifeNameSeparator)[1];
     const isColor = colorImageNames.includes(baseName);
 
     // 选择使用彩色还是灰度图片

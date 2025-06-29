@@ -144,4 +144,5 @@ export async function apply(ctx: Context, config: Config) {
   command.lpda(ctx, config);
   command.yhda(ctx, config);
   command.gxlpsj(ctx, config);
+  command.cmmlp(ctx, config);
 }

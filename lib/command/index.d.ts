@@ -11,6 +11,7 @@ import { gxlp } from "./gxlp";
 import { lpda } from "./lpda";
 import { yhda } from "./yhda";
 import { gxlpsj } from "./gxlpsj";
+import { cmmlp } from "./cmmlp";
 declare const _default: {
     clp: typeof clp;
     nlp: typeof nlp;
@@ -25,5 +26,6 @@ declare const _default: {
     lpda: typeof lpda;
     yhda: typeof yhda;
     gxlpsj: typeof gxlpsj;
+    cmmlp: typeof cmmlp;
 };
 export default _default;

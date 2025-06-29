@@ -29,12 +29,12 @@
 - 先启动一次创建所需目录
 - 在``data/assets/wifegacha/``目录中存放老婆图片。
 - 下载[老婆包](https://github.com/Bear-biscuit/koishi-plugin-wifegacha/releases/tag/%E8%80%81%E5%A9%86%E6%95%B0%E6%8D%AE)
-- 命名规则[老婆名]+[来源],来源不是必要的
+- 命名规则[来源]+[名称]
 ```
 wifegacha/
-├── 后藤一里+孤独摇滚.png
-├── 山田凉+孤独摇滚.png
-└── 伊地知虹夏.png
+├── 孤独摇滚+后藤一里.png
+├── 孤独摇滚+山田凉.png
+└── 孤独摇滚+伊地知虹夏.png
 ```
 
 ---
