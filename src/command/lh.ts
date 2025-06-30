@@ -31,6 +31,7 @@ export function lh(ctx: Context, config: Config) {
       })
     )[0];
     if(!(await utils.isSameDay(ctx, new Date(), session))){
+      ctx.logger.info("离婚次数重置");
       ctx.database.set("wifeUser", { userId: session.userId, groupId: session.channelId.toString() }, {
         operationDate: new Date(),
         divorceCount: 0,
