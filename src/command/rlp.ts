@@ -69,7 +69,7 @@ export function rlp(ctx: Context,config: Config) {
       affection = -2;
       audioUrl = getRandomWavFile(path.join(wifegachaPath, "-2"));
       if(!audioUrl){
-        session.send([h("quote", { id: session.messageId }), "没有找到老婆语音文件"]);
+        // session.send([h("quote", { id: session.messageId }), "没有找到老婆语音文件"]);
         return;
       }
       audioUrl = path.join(wifegachaPath, "-2", audioUrl);
@@ -77,7 +77,7 @@ export function rlp(ctx: Context,config: Config) {
       affection = -1;
       audioUrl = getRandomWavFile(path.join(wifegachaPath, "-1"));
       if(!audioUrl){
-        session.send([h("quote", { id: session.messageId }), "没有找到老婆语音文件"]);
+        // session.send([h("quote", { id: session.messageId }), "没有找到老婆语音文件"]);
         return;
       }
       audioUrl = path.join(wifegachaPath, "-1", audioUrl);
@@ -85,7 +85,7 @@ export function rlp(ctx: Context,config: Config) {
       affection = 3;
       audioUrl = getRandomWavFile(path.join(wifegachaPath, "+3"));
       if(!audioUrl){
-        session.send([h("quote", { id: session.messageId }), "没有找到老婆语音文件"]);
+        // session.send([h("quote", { id: session.messageId }), "没有找到老婆语音文件"]);
         return;
       }
       audioUrl = path.join(wifegachaPath, "+3", audioUrl);
@@ -93,7 +93,7 @@ export function rlp(ctx: Context,config: Config) {
       affection = 2;
       audioUrl = getRandomWavFile(path.join(wifegachaPath, "+2"));
       if(!audioUrl){
-        session.send([h("quote", { id: session.messageId }), "没有找到老婆语音文件"]);
+        // session.send([h("quote", { id: session.messageId }), "没有找到老婆语音文件"]);
         return;
       }
       audioUrl = path.join(wifegachaPath, "+2", audioUrl);
@@ -101,7 +101,7 @@ export function rlp(ctx: Context,config: Config) {
       affection = 1;
       audioUrl = getRandomWavFile(path.join(wifegachaPath, "+1"));
       if(!audioUrl){
-        session.send([h("quote", { id: session.messageId }), "没有找到老婆语音文件"]);
+        // session.send([h("quote", { id: session.messageId }), "没有找到老婆语音文件"]);
         return;
       }
       audioUrl = path.join(wifegachaPath, "+1", audioUrl);
@@ -145,8 +145,8 @@ export function rlp(ctx: Context,config: Config) {
           });
           session.send([
             h("quote", { id: session.messageId }),
-            `老婆好感度${affection > 0 ? "+" : ""}${affection}\n当前好感度：${userData.wifeHistories.find(item => item.wifeName === wifeName)?.affection}\n当前好感等级：${userData.wifeHistories.find(item => item.wifeName === wifeName)?.affectionLevel}\n每级好感度都会降低10%被牛走概率`,
-            audioUrl?h.audio(pathToFileURL(path.resolve(audioUrl)).href):""
+            `${userData.wifeName}好感度${affection > 0 ? "+" : ""}${affection}\n${config.fuckWifeDetailedReply ? `当前好感度：${userData.wifeHistories.find(item => item.wifeName === wifeName)?.affection}\n当前好感等级：${userData.wifeHistories.find(item => item.wifeName === wifeName)?.affectionLevel}\n每级好感度都会降低10%被牛走概率` : ""}`,
+            audioUrl&&config.fuckWifeVoiceReply?h.audio(pathToFileURL(path.resolve(audioUrl)).href):""
           ]);
         }else{
         const now = new Date().getTime();
@@ -190,8 +190,8 @@ export function rlp(ctx: Context,config: Config) {
           });
           session.send([
             h("quote", { id: session.messageId }),
-            `老婆好感度${affection > 0 ? "+" : ""}${affection}\n当前好感度：${userData.wifeHistories.find(item => item.wifeName === wifeName)?.affection}\n当前好感等级：${userData.wifeHistories.find(item => item.wifeName === wifeName)?.affectionLevel}\n每级好感度都会降低10%被牛走概率`,
-            audioUrl?h.audio(pathToFileURL(path.resolve(audioUrl)).href):""
+            `${userData.wifeName}好感度${affection > 0 ? "+" : ""}${affection}\n${config.fuckWifeDetailedReply ? `当前好感度：${userData.wifeHistories.find(item => item.wifeName === wifeName)?.affection}\n当前好感等级：${userData.wifeHistories.find(item => item.wifeName === wifeName)?.affectionLevel}\n每级好感度都会降低10%被牛走概率` : ""}`,
+            audioUrl&&config.fuckWifeVoiceReply?h.audio(pathToFileURL(path.resolve(audioUrl)).href):""
           ]);
           }else{
             const minutes = Math.floor((config.fuckWifeCoolingTime - diffSeconds)/60);

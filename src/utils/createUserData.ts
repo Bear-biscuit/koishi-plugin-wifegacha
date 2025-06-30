@@ -30,7 +30,7 @@ export async function createUserData(ctx: Context, session: Session) {
       targetNtrCount: 0,
       targetNtrSuccessCount: 0,
       interactionWithOtherUser: [],
-      drawWifeDate: yesterday,
+      operationDate: yesterday,
       lpdaDate: yesterday,
     });
   }

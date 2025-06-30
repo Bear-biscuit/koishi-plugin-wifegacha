@@ -10,6 +10,7 @@ import sprit from "./sprit";
 import { upWifeData } from "./upWifeData";
 import { createInteraction } from "./createInteraction";
 import readImageAsBinarySync from "./readImageAsBinarySync";
+import { isSameDay } from "./isSameDay";
 export default {
   createUserData,
   createGroupData,
@@ -22,5 +23,6 @@ export default {
   upWifeData,
   sprit,
   createInteraction,
-  readImageAsBinarySync
+  readImageAsBinarySync,
+  isSameDay
 }

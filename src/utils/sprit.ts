@@ -78,17 +78,35 @@ async function generateThumbnails(ctx: Context, options: {
   fs.readdirSync(grayOutDir).forEach(file => fs.unlinkSync(path.join(grayOutDir, file)));
 
   const files = fs.readdirSync(inDir).filter(name => /\.(png|jpe?g)$/i.test(name));
-  const tasks = files.flatMap(file => {
+  const tasks = files.flatMap(async file => {
     const inputPath = path.join(inDir, file);
     const baseName = path.parse(file).name + '.png';
 
     const colorOut = path.join(colDir, baseName);
     const grayOut = path.join(grayOutDir, baseName);
 
-    return [
-      sharp(inputPath).resize(width, height, { fit: 'fill' }).toFile(colorOut),
-      sharp(inputPath).resize(width, height, { fit: 'fill' }).grayscale().toFile(grayOut)
-    ];
+    // 先生成彩色缩略图，宽度80，高度自适应，保持原比例
+    const colorBuffer = await sharp(inputPath)
+      .resize({ width: width, fit: 'inside', background: { r: 0, g: 0, b: 0, alpha: 0 } })
+      .extend({
+        top: 2, bottom: 2, left: 2, right: 2,
+        background: { r: 255, g: 255, b: 255, alpha: 1 }
+      })
+      .png()
+      .toBuffer();
+    await sharp(colorBuffer).toFile(colorOut);
+
+    // 再生成灰度缩略图
+    const grayBuffer = await sharp(inputPath)
+      .resize({ width: width, fit: 'inside', background: { r: 0, g: 0, b: 0, alpha: 0 } })
+      .grayscale()
+      .extend({
+        top: 2, bottom: 2, left: 2, right: 2,
+        background: { r: 255, g: 255, b: 255, alpha: 1 }
+      })
+      .png()
+      .toBuffer();
+    await sharp(grayBuffer).toFile(grayOut);
   });
 
   await Promise.all(tasks);
@@ -128,40 +146,76 @@ async function generateMixedBackgroundImage(ctx: Context, config:Config, colorIm
     grayDir: grayOutDir = grayDir,
     imageSize = 80,
     gridWidth = 567,
-    padding = 5
+    padding = 3
   } = options;
 
   // 获取所有图片文件
   const grayFiles = fs.readdirSync(grayOutDir).filter(f => /\.(png|jpe?g)$/i.test(f));
   const thumbFiles = [...grayFiles]; // 复制文件列表用于后续处理
 
-  const composites = [];
-  const cols = Math.floor(gridWidth / (imageSize + padding));
-  const rows = Math.ceil(thumbFiles.length / cols);
-  const totalHeight = rows * (imageSize + padding) + 20 - padding;
-
-  // 处理每一个图片，决定使用彩色还是灰度
-  for (let i = 0; i < thumbFiles.length; i++) {
-    const file = thumbFiles[i];
+  // 读取所有缩略图的尺寸，找出最大高度
+  const imageMetas = await Promise.all(thumbFiles.map(async file => {
     const baseName = path.parse(file).name.split(config.wifeNameSeparator)[1];
     const isColor = colorImageNames.includes(baseName);
+    const imgPath = isColor ? path.join(colDir, file) : path.join(grayOutDir, file);
+    const buffer = await sharp(imgPath)
+      .resize({ width: 80, fit: 'contain', background: { r: 0, g: 0, b: 0, alpha: 0 } })
+      .png()
+      .toBuffer();
+    const meta = await sharp(buffer).metadata();
+    return { file, baseName, isColor, width: meta.width, height: meta.height, buffer };
+  }));
+  const maxHeight = Math.max(...imageMetas.map(m => m.height || 0));
 
-    // 选择使用彩色还是灰度图片
-    const imgPath = isColor
-      ? path.join(colDir, file)
-      : path.join(grayOutDir, file);
+  // 补齐高度，内容上下居中，并加区域边框
+  const finalBuffers = await Promise.all(imageMetas.map(async meta => {
+    const topPad = Math.floor((maxHeight - (meta.height || 0)) / 2);
+    const bottomPad = maxHeight - (meta.height || 0) - topPad;
+    // 先生成白底区域
+    let region = await sharp({
+      create: {
+        width: 80,
+        height: maxHeight,
+        channels: 4,
+        background: { r: 255, g: 255, b: 255, alpha: 1 }
+      }
+    })
+      .png()
+      .toBuffer();
+    // 再把图片内容贴到区域中央
+    region = await sharp(region)
+      .composite([
+        { input: meta.buffer, top: topPad, left: 0 }
+      ])
+      .png()
+      .toBuffer();
+    // 最后加2px黑色边框
+    region = await sharp(region)
+      .extend({
+        top: 2, bottom: 2, left: 2, right: 2,
+        background: { r: 0, g: 0, b: 0, alpha: 1 }
+      })
+      .png()
+      .toBuffer();
+    return { ...meta, buffer: region, width: 80 + 4, height: maxHeight + 4 };
+  }));
 
-    const row = Math.floor(i / cols);
-    const col = i % cols;
-
-    const itemsInRow = (row === rows - 1 && thumbFiles.length % cols !== 0) ? thumbFiles.length % cols : cols;
-    const rowWidth = itemsInRow * imageSize + (itemsInRow - 1) * padding;
-    const offsetX = Math.floor((gridWidth - rowWidth) / 2);
-    const x = col * (imageSize + padding) + offsetX;
-    const y = row * (imageSize + padding) + 10;
-
-    composites.push({ input: imgPath, top: y, left: x });
+  // 计算排版
+  const cols = Math.floor(gridWidth / (80 + 4 + padding));
+  const rows = Math.ceil(finalBuffers.length / cols);
+  let composites = [];
+  let y = 10;
+  for (let row = 0; row < rows; row++) {
+    const rowItems = finalBuffers.slice(row * cols, (row + 1) * cols);
+    const rowWidth = rowItems.length * (80 + 4) + (rowItems.length - 1) * padding;
+    let x = Math.floor((gridWidth - rowWidth) / 2);
+    for (let i = 0; i < rowItems.length; i++) {
+      composites.push({ input: rowItems[i].buffer, top: y, left: x });
+      x += (80 + 4) + padding;
+    }
+    y += (maxHeight + 4) + padding;
   }
+  const totalHeight = y + 10 - padding;
 
   const bgResized = await sharp(backgroundPath)
     .resize({ width: gridWidth, height: totalHeight })
@@ -170,7 +224,7 @@ async function generateMixedBackgroundImage(ctx: Context, config:Config, colorIm
   // 直接返回图片的二进制数据
   const imageBuffer = await sharp(bgResized)
     .composite(composites)
-    .jpeg({ quality: 75 })
+    .jpeg({ quality: config.wifeImageQuality })
     .toBuffer();
 
   ctx.logger.info('🎉 图鉴生成完成，图片大小：', imageBuffer.length);

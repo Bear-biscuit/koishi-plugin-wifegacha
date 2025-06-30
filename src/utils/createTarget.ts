@@ -30,7 +30,7 @@ export async function createTarget(ctx: Context, session: Session, userId: strin
       totalAffection: 0,
       targetNtrCount: 0,
       targetNtrSuccessCount: 0,
-      drawWifeDate: yesterday,
+      operationDate: yesterday,
     });
   }
 }
