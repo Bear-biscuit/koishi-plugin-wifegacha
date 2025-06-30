@@ -28,8 +28,7 @@ export function clp(ctx: Context) {
     const wifeName = await utils.checkGroupDate(
       ctx,
       session.channelId.toString(),
-      new Date().toISOString(),
-      // '2025-06-28T12:43:37.392Z',
+      new Date(),
       session
     );
     if (wifeName) {

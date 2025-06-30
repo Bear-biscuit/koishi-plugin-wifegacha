@@ -5,10 +5,10 @@ export interface WifeUser {
     userId: string;
     groupId: string;
     wifeName: string;
+    operationDate: Date;
     ntrOrdinal: number;
     fuckWifeDate: Date;
     lpdaDate: Date;
-    drawWifeDate: Date;
     wifeHistories: Array<{
         wifeName: string;
         getWifeDate: Date;

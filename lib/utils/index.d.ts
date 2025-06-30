@@ -9,6 +9,7 @@ import { createWifeData } from "./createWifeData";
 import { upWifeData } from "./upWifeData";
 import { createInteraction } from "./createInteraction";
 import readImageAsBinarySync from "./readImageAsBinarySync";
+import { isSameDay } from "./isSameDay";
 declare const _default: {
     createUserData: typeof createUserData;
     createGroupData: typeof createGroupData;
@@ -43,5 +44,6 @@ declare const _default: {
     };
     createInteraction: typeof createInteraction;
     readImageAsBinarySync: typeof readImageAsBinarySync;
+    isSameDay: typeof isSameDay;
 };
 export default _default;

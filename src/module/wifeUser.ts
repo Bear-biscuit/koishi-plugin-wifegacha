@@ -10,14 +10,14 @@ export interface WifeUser {
   groupId: string;
   // 当前老婆名字
   wifeName: string;
+  // 操作时间
+  operationDate: Date;
   // 牛老婆使用次数
   ntrOrdinal: number;
   // 日老婆时间
   fuckWifeDate: Date;
   // 档案查询时间
   lpdaDate: Date;
-  // 抽老婆时间
-  drawWifeDate: Date;
   // 老婆历史记录
   wifeHistories: Array<{
     // 老婆名字
@@ -88,10 +88,10 @@ export function wifeUser(ctx: Context, config: Config) {
     userId: "string",
     groupId: "string",
     wifeName: "string",
+    operationDate: "timestamp",
     ntrOrdinal: "integer",
     fuckWifeDate: "timestamp",
     lpdaDate: "timestamp",
-    drawWifeDate: "timestamp",
     wifeHistories: "json",
     interactionWithOtherUser: "json",
     createdAt: "timestamp",

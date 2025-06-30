@@ -33,6 +33,10 @@ export interface Config {
   fuckWifeCoolingTime: number;
   // 日老婆总开关
   fuckWifeSwitchgear: boolean;
+  // 详细回复
+  fuckWifeDetailedReply: boolean;
+  // 语音回复
+  fuckWifeVoiceReply: boolean;
   // 日老婆屏蔽群组
   fuckWifeBlockGroup: string[];
   // 老婆名称来源分隔符
@@ -47,15 +51,28 @@ export interface Config {
   wifeDeleteGroup: string[];
   // 管理员ID
   adminId: string;
+  // 老婆图鉴质量
+  wifeImageQuality: number;
   // 档案查询时间间隔
   lpdaDateInterval: number;
 }
 
 export const Config: Schema<Config> = Schema.intersect([
   Schema.object({
-    wifeNameSeparator: Schema.string().default("+").description("老婆'名称' '来源'分隔符"),
+    wifeNameSeparator: Schema.string()
+      .default("+")
+      .description("老婆'名称' '来源'分隔符"),
     adminId: Schema.string().required().description("管理员ID"),
-    lpdaDateInterval: Schema.number().default(10).description("档案查询时间间隔(秒)"),
+    wifeImageQuality: Schema.number()
+      .default(75)
+      .min(50)
+      .max(100)
+      .step(1)
+      .role("slider")
+      .description("老婆图鉴质量(50-100)"),
+    lpdaDateInterval: Schema.number()
+      .default(10)
+      .description("档案查询时间间隔(秒)"),
     blockGroup: Schema.array(Schema.string())
       .default([])
       .collapse()
@@ -90,22 +107,36 @@ export const Config: Schema<Config> = Schema.intersect([
       .description("离婚屏蔽群组"),
   }).description("离婚设置"),
   Schema.object({
-    fuckWifeCoolingTime: Schema.number()
-      .default(10)
-      .description("日老婆冷却时间(秒)"),
     fuckWifeSwitchgear: Schema.boolean()
       .default(true)
       .description("日老婆总开关"),
+    fuckWifeCoolingTime: Schema.number()
+      .default(10)
+      .description("日老婆冷却时间(秒)"),
+    fuckWifeDetailedReply: Schema.boolean()
+      .default(false)
+      .description("详细回复"),
+    fuckWifeVoiceReply: Schema.boolean()
+      .default(false)
+      .description("语音回复"),
     fuckWifeBlockGroup: Schema.array(Schema.string())
       .default([])
       .collapse()
       .description("日老婆屏蔽群组"),
   }).description("日老婆设置"),
   Schema.object({
-    wifeAllOperationGroup: Schema.array(Schema.string()).role('table').description("允许所有老婆操作权限的用户组"),
-    wifeUploadGroup: Schema.array(Schema.string()).role('table').description("仅允许上传老婆权限的用户组"),
-    wifeUpdateGroup: Schema.array(Schema.string()).role('table').description("仅允许更新老婆权限的用户组"),
-    wifeDeleteGroup: Schema.array(Schema.string()).role('table').description("仅允许删除老婆权限的用户组"),
+    wifeAllOperationGroup: Schema.array(Schema.string())
+      .role("table")
+      .description("允许所有老婆操作权限的用户组"),
+    wifeUploadGroup: Schema.array(Schema.string())
+      .role("table")
+      .description("仅允许上传老婆权限的用户组"),
+    wifeUpdateGroup: Schema.array(Schema.string())
+      .role("table")
+      .description("仅允许更新老婆权限的用户组"),
+    wifeDeleteGroup: Schema.array(Schema.string())
+      .role("table")
+      .description("仅允许删除老婆权限的用户组"),
   }).description("老婆更新权限设置"),
 ]);
 
@@ -125,7 +156,7 @@ export async function apply(ctx: Context, config: Config) {
   // 初始化老婆数据
   if ((await ctx.database.get("wifeData", {})).length === 0) {
     ctx.logger.info("wifeData表中没有数据,开始初始化");
-    createWifeData(ctx,config);
+    createWifeData(ctx, config);
   }
   // ctx.logger.info((await ctx.database.get('wifeData', {})).map(item => item.name))
   // ctx.logger.info(getWifeImage(ctx, '波奇酱'))

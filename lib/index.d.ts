@@ -13,6 +13,8 @@ export interface Config {
     divorceBlockGroup: string[];
     fuckWifeCoolingTime: number;
     fuckWifeSwitchgear: boolean;
+    fuckWifeDetailedReply: boolean;
+    fuckWifeVoiceReply: boolean;
     fuckWifeBlockGroup: string[];
     wifeNameSeparator: string;
     wifeAllOperationGroup: string[];
@@ -20,6 +22,7 @@ export interface Config {
     wifeUpdateGroup: string[];
     wifeDeleteGroup: string[];
     adminId: string;
+    wifeImageQuality: number;
     lpdaDateInterval: number;
 }
 export declare const Config: Schema<Config>;

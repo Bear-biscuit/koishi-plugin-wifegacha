@@ -30,7 +30,7 @@ export function lptj(ctx: Context, config: Config) {
       const imageBuffer = await sprit.generateMixedBackgroundImage(ctx, config, lpList);
       session.send([
         h("quote", { id: session.messageId }),
-        "老婆图鉴（含牛老婆）",
+        `你的老婆图鉴已出炉~`,
         h.image(imageBuffer, "png"),
         `老婆收集进度：${lpList.length}/${lpAllNum}`,
       ]);
@@ -46,7 +46,7 @@ export function lptj(ctx: Context, config: Config) {
       const imageBuffer = await sprit.generateMixedBackgroundImage(ctx, config, lpList);
       session.send([
         h("quote", { id: session.messageId }),
-        "老婆图鉴（不含牛老婆）",
+        "你的老婆图鉴已出炉~",
         h.image(imageBuffer, "png"),
         `老婆收集进度：${lpList.length}/${lpAllNum}`,
       ]);

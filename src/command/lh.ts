@@ -30,6 +30,12 @@ export function lh(ctx: Context, config: Config) {
         groupId: session.channelId.toString(),
       })
     )[0];
+    if(!(await utils.isSameDay(ctx, new Date(), session))){
+      ctx.database.set("wifeUser", { userId: session.userId, groupId: session.channelId.toString() }, {
+        operationDate: new Date(),
+        divorceCount: 0,
+      })
+    }
     // ctx.logger.info(userData);
     if (!userData?.wifeName) {
       session.send([h("quote", { id: session.messageId }), "你还没有老婆"]);
@@ -40,7 +46,7 @@ export function lh(ctx: Context, config: Config) {
       name: userData.wifeName,
     }))[0];
     // 离婚次数是否达到上限
-    if (userData.divorceCount >= config.divorceLimit) {
+    if (userData.divorceCount >= config.divorceLimit && userData.divorceCount > 0) {
       session.send(`你已经离婚${config.divorceLimit}次了，你这个渣男`);
       return;
     }
@@ -51,6 +57,12 @@ export function lh(ctx: Context, config: Config) {
       {
         divorceCount: userData.divorceCount + 1,
         wifeName: "",
+        wifeHistories: userData.wifeHistories.map(item => {
+          if(item.wifeName === userData.wifeName){
+            item.affection -= 1;
+          }
+          return item;
+        })
       }
     );
     // 更新群数据
@@ -76,7 +88,7 @@ export function lh(ctx: Context, config: Config) {
     });
     session.send([
       h("quote", { id: session.messageId }),
-      `你和${userData.wifeName}离婚了`,
+      `你和${userData.wifeName}离婚了\n${userData.wifeName}对你的好感度 -1`,
     ]);
   });
 }
