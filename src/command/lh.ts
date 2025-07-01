@@ -35,6 +35,8 @@ export function lh(ctx: Context, config: Config) {
       ctx.database.set("wifeUser", { userId: session.userId, groupId: session.channelId.toString() }, {
         operationDate: new Date(),
         divorceCount: 0,
+        wifeName: "",
+        ntrCount: 0,
       })
     }
     // ctx.logger.info(userData);

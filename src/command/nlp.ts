@@ -77,6 +77,8 @@ export function nlp(ctx: Context, config: Config) {
           {
             operationDate: new Date(),
             ntrCount: 0,
+            divorceCount: 0,
+            wifeName: "",
           }
         );
       }

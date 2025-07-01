@@ -1,7 +1,6 @@
-import { Context,Session } from "koishi";
+import { Context, Session } from "koishi";
 import { isSameDay } from "./isSameDay";
-let wifeNameArray = new Map<string, object>()
-
+let wifeNameArray = new Map<string, object>();
 
 /**
  * 检查 group 是否当天重复，并根据情况执行不同逻辑
@@ -10,12 +9,19 @@ let wifeNameArray = new Map<string, object>()
  * @param {Date} inputTime - 当前时间
  * @param {Session} session - 会话对象
  */
-export async function checkGroupDate(ctx: Context, group: string, inputTime: Date, session: Session) {
+export async function checkGroupDate(
+  ctx: Context,
+  group: string,
+  inputTime: Date,
+  session: Session
+) {
   // 检查 map 中是否存在该 group
   if (!wifeNameArray.has(group)) {
     wifeNameArray.set(group, {
-      'wifeName': (await ctx.database.get('wifeData', {})).map(item => item.name)
-    })
+      wifeName: (await ctx.database.get("wifeData", {})).map(
+        (item) => item.name
+      ),
+    });
   }
 
   const userData = (
@@ -27,30 +33,36 @@ export async function checkGroupDate(ctx: Context, group: string, inputTime: Dat
 
   // 判断是否为同一天
   if (await isSameDay(ctx, inputTime, session)) {
-
     if (userData.wifeName) {
       return null;
     }
 
-     // 同一天执行逻辑2
-    if (wifeNameArray.get(group)['wifeName'].length === 0) {
+    // 同一天执行逻辑2
+    if (wifeNameArray.get(group)["wifeName"].length === 0) {
       return null; // 空数组直接返回 null
     }
 
     // 随机生成一个索引
     // 这里的随机索引应该基于最新的 wifeName 数组长度
-    const wifeNames = wifeNameArray.get(group)['wifeName'];
+    const wifeNames = wifeNameArray.get(group)["wifeName"];
     const index = Math.floor(Math.random() * wifeNames.length);
 
     // 使用 splice 移除并返回该元素（splice 返回数组）
-    const [removed] = wifeNameArray.get(group)['wifeName'].splice(index, 1);
+    const [removed] = wifeNameArray.get(group)["wifeName"].splice(index, 1);
     return removed;
   } else {
-    if (userData.wifeName) {
-      ctx.database.set("wifeUser", { userId: session.userId, groupId: session.channelId.toString() }, { wifeName: '' })
-    }
-    ctx.database.set("wifeUser", { userId: session.userId, groupId: session.channelId.toString() }, { operationDate: new Date() })
-    wifeNameArray.get(group)['wifeName'] = (await ctx.database.get('wifeData', {})).map(item => item.name)
-    return checkGroupDate(ctx, group, inputTime, session)
+    ctx.database.set(
+      "wifeUser",
+      { userId: session.userId, groupId: session.channelId.toString() },
+      { operationDate: new Date(),
+        ntrCount:0,
+        divorceCount:0,
+        wifeName:''
+       }
+    );
+    wifeNameArray.get(group)["wifeName"] = (
+      await ctx.database.get("wifeData", {})
+    ).map((item) => item.name);
+    return checkGroupDate(ctx, group, inputTime, session);
   }
 }
