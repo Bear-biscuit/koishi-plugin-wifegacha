@@ -270,7 +270,7 @@ export function nlp(ctx: Context, config: Config) {
           h("quote", { id: session.messageId }),
           `你的阴谋失败了，黄毛被干掉了\n你还有${
             config.ntrOrdinal - myUserData.ntrCount - 1
-          }次机会\n当前成功率：${config.probabilityMath}%`,
+          }次机会\n当前成功率：${config.probabilityMath - targetWifeAffectionLevel * 10}%`,
         ]);
       }
     });

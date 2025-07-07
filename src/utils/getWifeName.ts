@@ -60,9 +60,21 @@ export async function checkGroupDate(
         wifeName:''
        }
     );
+    const nowWifeList = (await ctx.database.get("wifeUser", {groupId: session.channelId.toString()})).map(item=>{
+      if(item.wifeName!=''){
+        return item.wifeName
+      }
+      return null
+    }).filter(Boolean);
+
     wifeNameArray.get(group)["wifeName"] = (
       await ctx.database.get("wifeData", {})
-    ).map((item) => item.name);
+    ).map((item) => {
+      if(item.name && !nowWifeList.includes(item.name)){
+        return item.name;
+      }
+      return null;
+    }).filter(Boolean);
     return checkGroupDate(ctx, group, inputTime, session);
   }
 }
