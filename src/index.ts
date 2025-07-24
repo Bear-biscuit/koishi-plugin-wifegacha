@@ -15,8 +15,10 @@ export interface Config {
   blockGroup: string[];
   // 牛老婆次数
   ntrOrdinal: number;
-  // 牛老婆概率
+  // 牛老婆成功率计算方式
   probabilityMath: number;
+  // 直接概率
+  probabilityMathDirect: number;
   // 牛老婆总开关
   ntrSwitchgear: boolean;
   // 牛老婆屏蔽群组
@@ -55,6 +57,8 @@ export interface Config {
   wifeImageQuality: number;
   // 档案查询时间间隔
   lpdaDateInterval: number;
+  // 离婚时间间隔
+  divorceDateInterval: number;
 }
 
 export const Config: Schema<Config> = Schema.intersect([
@@ -80,13 +84,19 @@ export const Config: Schema<Config> = Schema.intersect([
   }).description("基础设置"),
   Schema.object({
     ntrOrdinal: Schema.number().default(5).description("牛老婆次数"),
-    probabilityMath: Schema.number()
-      .role("slider")
+    probabilityMath: Schema.union([
+      Schema.const(0).description("直接概率"),
+      Schema.const(1).description("特定算法"),
+    ])
+      .role("radio")
+      .default(0)
+      .description("牛老婆成功率计算方式"),
+    probabilityMathDirect: Schema.number()
+      .default(50)
       .min(0)
       .max(100)
       .step(1)
-      .default(50)
-      .description("牛老婆概率(0-100)"),
+      .description("直接概率(只有选择直接概率时有效)"),
     ntrSwitchgear: Schema.boolean().default(true).description("牛老婆总开关"),
     ntrBlockGroup: Schema.array(Schema.string())
       .default([])
@@ -99,6 +109,9 @@ export const Config: Schema<Config> = Schema.intersect([
       .description("图鉴收集是否包含牛老婆"),
   }).description("图鉴设置"),
   Schema.object({
+    divorceDateInterval: Schema.number()
+      .default(10)
+      .description("离婚时间间隔(秒)"),
     divorceLimit: Schema.number().default(10).description("离婚次数限制"),
     divorceSwitchgear: Schema.boolean().default(true).description("离婚总开关"),
     divorceBlockGroup: Schema.array(Schema.string())
@@ -116,9 +129,7 @@ export const Config: Schema<Config> = Schema.intersect([
     fuckWifeDetailedReply: Schema.boolean()
       .default(false)
       .description("详细回复"),
-    fuckWifeVoiceReply: Schema.boolean()
-      .default(false)
-      .description("语音回复"),
+    fuckWifeVoiceReply: Schema.boolean().default(false).description("语音回复"),
     fuckWifeBlockGroup: Schema.array(Schema.string())
       .default([])
       .collapse()

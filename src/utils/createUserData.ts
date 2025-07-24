@@ -32,6 +32,8 @@ export async function createUserData(ctx: Context, session: Session) {
       interactionWithOtherUser: [],
       operationDate: yesterday,
       lpdaDate: yesterday,
+      divorceDate: yesterday,
+      todayAffection: [],
     });
   }
 }

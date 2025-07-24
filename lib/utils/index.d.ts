@@ -10,6 +10,7 @@ import { upWifeData } from "./upWifeData";
 import { createInteraction } from "./createInteraction";
 import readImageAsBinarySync from "./readImageAsBinarySync";
 import { isSameDay } from "./isSameDay";
+import { camelCase } from "./camelCase";
 declare const _default: {
     createUserData: typeof createUserData;
     createGroupData: typeof createGroupData;
@@ -45,5 +46,6 @@ declare const _default: {
     createInteraction: typeof createInteraction;
     readImageAsBinarySync: typeof readImageAsBinarySync;
     isSameDay: typeof isSameDay;
+    camelCase: typeof camelCase;
 };
 export default _default;

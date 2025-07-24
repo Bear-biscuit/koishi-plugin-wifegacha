@@ -26,11 +26,11 @@ export function rlp(ctx: Context,config: Config) {
       return;
     }
     if(!config.fuckWifeSwitchgear){
-      session.send([h("quote", { id: session.messageId }), "日老婆功能未开启，请联系管理员"]);
+      session.send([h("quote", { id: session.messageId }), "好感度功能未开启，请联系管理员"]);
       return;
     }
     if(config.fuckWifeBlockGroup.includes(session.channelId.toString())){
-      session.send([h("quote", { id: session.messageId }), "本群日老婆功能已被禁止，请联系管理员"]);
+      session.send([h("quote", { id: session.messageId }), "本群好感度功能已被禁止，请联系管理员"]);
       return;
     }
 
@@ -117,12 +117,23 @@ export function rlp(ctx: Context,config: Config) {
               item.affectionLevel = utils.affectionLevel(item.affection);
             }
           })
+          const target = userData.todayAffection.find(item => item.wifeName === wifeName);
+
+          if (!target) {
+            userData.todayAffection.push({
+              wifeName: wifeName,
+              todayAffection: affection,
+            });
+          } else {
+            target.todayAffection += affection;
+          }
           ctx.database.set("wifeUser", {
             userId: session.userId,
             groupId: session.channelId.toString(),
           }, {
             wifeHistories: userData.wifeHistories,
             fuckWifeDate: userData.fuckWifeDate,
+            todayAffection: userData.todayAffection,
           });
           // 更新群数据
           ctx.database.set("groupData", {
@@ -145,7 +156,7 @@ export function rlp(ctx: Context,config: Config) {
           });
           session.send([
             h("quote", { id: session.messageId }),
-            `${userData.wifeName}好感度${affection > 0 ? "+" : ""}${affection}\n${config.fuckWifeDetailedReply ? `当前好感度：${userData.wifeHistories.find(item => item.wifeName === wifeName)?.affection}\n当前好感等级：${userData.wifeHistories.find(item => item.wifeName === wifeName)?.affectionLevel}\n每级好感度都会降低10%被牛走概率` : ""}`,
+            `${userData.wifeName}好感度${affection > 0 ? "+" : ""}${affection}\n${config.fuckWifeDetailedReply ? `当前好感度：${userData.wifeHistories.find(item => item.wifeName === wifeName)?.affection}\n当前好感等级：${userData.wifeHistories.find(item => item.wifeName === wifeName)?.affectionLevel}\n每级好感度会影响被牛老婆成功率` : ""}`,
             audioUrl&&config.fuckWifeVoiceReply?h.audio(pathToFileURL(path.resolve(audioUrl)).href):""
           ]);
         }else{
@@ -162,12 +173,23 @@ export function rlp(ctx: Context,config: Config) {
               item.affectionLevel = utils.affectionLevel(item.affection);
             }
           })
+          const target = userData.todayAffection.find(item => item.wifeName === wifeName);
+
+          if (!target) {
+            userData.todayAffection.push({
+              wifeName: wifeName,
+              todayAffection: affection,
+            });
+          } else {
+            target.todayAffection += affection;
+          }
           ctx.database.set("wifeUser", {
             userId: session.userId,
             groupId: session.channelId.toString(),
           }, {
             wifeHistories: userData.wifeHistories,
             fuckWifeDate: userData.fuckWifeDate,
+            todayAffection: userData.todayAffection,
           });
           // 更新群数据
           ctx.database.set("groupData", {
@@ -190,13 +212,13 @@ export function rlp(ctx: Context,config: Config) {
           });
           session.send([
             h("quote", { id: session.messageId }),
-            `${userData.wifeName}好感度${affection > 0 ? "+" : ""}${affection}\n${config.fuckWifeDetailedReply ? `当前好感度：${userData.wifeHistories.find(item => item.wifeName === wifeName)?.affection}\n当前好感等级：${userData.wifeHistories.find(item => item.wifeName === wifeName)?.affectionLevel}\n每级好感度都会降低10%被牛走概率` : ""}`,
+            `${userData.wifeName}好感度${affection > 0 ? "+" : ""}${affection}\n${config.fuckWifeDetailedReply ? `当前好感度：${userData.wifeHistories.find(item => item.wifeName === wifeName)?.affection}\n当前好感等级：${userData.wifeHistories.find(item => item.wifeName === wifeName)?.affectionLevel}\n每级好感度会影响被牛老婆成功率` : ""}`,
             audioUrl&&config.fuckWifeVoiceReply?h.audio(pathToFileURL(path.resolve(audioUrl)).href):""
           ]);
           }else{
             const minutes = Math.floor((config.fuckWifeCoolingTime - diffSeconds)/60);
             const seconds = (config.fuckWifeCoolingTime - diffSeconds)%60;
-            session.send([h("quote", { id: session.messageId }), `日老婆冷却中，${minutes}分${seconds}秒后可以再次日老婆`]);
+            session.send([h("quote", { id: session.messageId }), `好感度冷却中，剩余冷却${minutes}分${seconds}秒`]);
           }
         }
     }

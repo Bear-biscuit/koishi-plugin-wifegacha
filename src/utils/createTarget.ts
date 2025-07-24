@@ -31,6 +31,7 @@ export async function createTarget(ctx: Context, session: Session, userId: strin
       targetNtrCount: 0,
       targetNtrSuccessCount: 0,
       operationDate: yesterday,
+      todayAffection: [],
     });
   }
 }

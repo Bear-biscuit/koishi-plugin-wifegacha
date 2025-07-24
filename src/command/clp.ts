@@ -32,6 +32,12 @@ export function clp(ctx: Context) {
       session
     );
     if (wifeName) {
+      if(!userData.todayAffection.find(item => item.wifeName === wifeName)){
+        userData.todayAffection.push({
+          wifeName: wifeName,
+          todayAffection: 0,
+        })
+      }
       // 更新群数据
       ctx.database.set(
         "groupData",
@@ -65,6 +71,7 @@ export function clp(ctx: Context) {
         {
           wifeName: wifeName,
           drawCount: userData.drawCount + 1,
+          todayAffection: userData.todayAffection,
         }
       );
 

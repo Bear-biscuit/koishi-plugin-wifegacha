@@ -5,6 +5,7 @@ export interface Config {
     blockGroup: string[];
     ntrOrdinal: number;
     probabilityMath: number;
+    probabilityMathDirect: number;
     ntrSwitchgear: boolean;
     ntrBlockGroup: string[];
     illustratedBook: boolean;
@@ -24,6 +25,7 @@ export interface Config {
     adminId: string;
     wifeImageQuality: number;
     lpdaDateInterval: number;
+    divorceDateInterval: number;
 }
 export declare const Config: Schema<Config>;
 export declare function apply(ctx: Context, config: Config): Promise<void>;

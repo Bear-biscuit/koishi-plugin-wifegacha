@@ -18,6 +18,15 @@ export interface WifeUser {
   fuckWifeDate: Date;
   // 档案查询时间
   lpdaDate: Date;
+  // 离婚时间
+  divorceDate: Date;
+  // 今日累计获得好感度
+  todayAffection: Array<{
+    // 老婆名字
+    wifeName: string;
+    // 今日获得好感度
+    todayAffection: number;
+  }>;
   // 老婆历史记录
   wifeHistories: Array<{
     // 老婆名字
@@ -92,6 +101,8 @@ export function wifeUser(ctx: Context, config: Config) {
     ntrOrdinal: "integer",
     fuckWifeDate: "timestamp",
     lpdaDate: "timestamp",
+    divorceDate: "timestamp",
+    todayAffection: "json",
     wifeHistories: "json",
     interactionWithOtherUser: "json",
     createdAt: "timestamp",

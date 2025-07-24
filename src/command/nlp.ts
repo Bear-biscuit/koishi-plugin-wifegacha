@@ -79,6 +79,7 @@ export function nlp(ctx: Context, config: Config) {
             ntrCount: 0,
             divorceCount: 0,
             wifeName: "",
+            todayAffection: [],
           }
         );
       }
@@ -159,13 +160,48 @@ export function nlp(ctx: Context, config: Config) {
           groupData: groupWifeData,
         }
       );
+      // 获取需要的信息
+      const lpNum = myUserData.wifeHistories.length;
+      const ntrSuccessCount = myUserData.ntrSuccessCount;
+      const targetWifeNum = targetUserData.wifeHistories.length;
+      const targetaffectionLevel = targetWifeAffectionLevel;
+      const targetWifeAffection = targetUserData.wifeHistories.find(
+        (item) => item.wifeName === targetUserData.wifeName
+      )?.affection ?? 0;
+      const targetTodayAffection = targetUserData.todayAffection.find(
+        (item) => item.wifeName === targetUserData.wifeName
+      )?.todayAffection ?? 0;
+      const affection =
+        myUserData.wifeHistories.find(
+          (item) => item.wifeName === targetUserData.wifeName
+        )?.affection ?? 0; // 默认为 0
+
+      ctx.logger.info(`lpNum: ${lpNum}, ntrSuccessCount: ${ntrSuccessCount}, targetWifeNum: ${targetWifeNum}, targetaffectionLevel: ${targetaffectionLevel}, todayAffection: ${targetTodayAffection}, affection: ${affection}`);
       // 生成一个0-99的随机整数
       const randomNumber = Math.floor(Math.random() * 100);
+      // 概率值
+      let probabilityValue = 0;
+      // 生成成功率
+      const successRate = utils.camelCase(
+        lpNum,
+        ntrSuccessCount,
+        targetWifeNum,
+        targetaffectionLevel,
+        targetTodayAffection,
+        affection,
+        targetWifeAffection
+      );
+      // 概率计算方式
+      if (config.probabilityMath === 0) {
+        probabilityValue = config.probabilityMathDirect - targetWifeAffectionLevel * 10;
+      } else {
+        probabilityValue = successRate;
+      }
       // ctx.logger.info(`生成的随机数: ${randomNumber}`);
       // 如果随机数小于概率（设定概率-好感等级*10），则牛老婆成功
       if (
         randomNumber <
-        config.probabilityMath - targetWifeAffectionLevel * 10
+        probabilityValue
       ) {
         // 先查找是否有对应的老婆历史记录
         let found = false;
@@ -262,7 +298,7 @@ export function nlp(ctx: Context, config: Config) {
           `你的阴谋得逞了!\n${
             (await session.bot.getUser(userId)).name
           }的老婆（${targetUserData.wifeName}）是你的了🥵\n当前成功率：${
-            config.probabilityMath - targetWifeAffectionLevel * 10
+            probabilityValue
           }%`,
         ]);
       } else {
@@ -270,7 +306,9 @@ export function nlp(ctx: Context, config: Config) {
           h("quote", { id: session.messageId }),
           `你的阴谋失败了，黄毛被干掉了\n你还有${
             config.ntrOrdinal - myUserData.ntrCount - 1
-          }次机会\n当前成功率：${config.probabilityMath - targetWifeAffectionLevel * 10}%`,
+          }次机会\n当前成功率：${
+            probabilityValue
+          }%`,
         ]);
       }
     });

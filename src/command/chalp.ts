@@ -7,7 +7,7 @@ export function chalp(ctx: Context) {
     if (ctx.config.blockGroup.includes(session.channelId.toString())) {
       return;
     }
-   if (userId){
+   if (userId && userId.match(/<at id="(\d+)"\s*\/>/)?.[1]){
     await utils.createTarget(ctx, session, userId?.match(/<at id="(\d+)"\s*\/>/)?.[1])
     const targetData = (await ctx.database.get("wifeUser", {
       userId: userId?.match(/<at id="(\d+)"\s*\/>/)?.[1],

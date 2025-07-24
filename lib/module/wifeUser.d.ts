@@ -9,6 +9,11 @@ export interface WifeUser {
     ntrOrdinal: number;
     fuckWifeDate: Date;
     lpdaDate: Date;
+    divorceDate: Date;
+    todayAffection: Array<{
+        wifeName: string;
+        todayAffection: number;
+    }>;
     wifeHistories: Array<{
         wifeName: string;
         getWifeDate: Date;
