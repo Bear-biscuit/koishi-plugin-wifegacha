@@ -117,23 +117,23 @@ export function rlp(ctx: Context,config: Config) {
               item.affectionLevel = utils.affectionLevel(item.affection);
             }
           })
-          const target = userData.todayAffection.find(item => item.wifeName === wifeName);
+          // const target = userData.todayAffection.find(item => item.wifeName === wifeName);
 
-          if (!target) {
-            userData.todayAffection.push({
-              wifeName: wifeName,
-              todayAffection: affection,
-            });
-          } else {
-            target.todayAffection += affection;
-          }
+          // if (!target) {
+          //   userData.todayAffection.push({
+          //     wifeName: wifeName,
+          //     todayAffection: affection,
+          //   });
+          // } else {
+          //   target.todayAffection += affection;
+          // }
           ctx.database.set("wifeUser", {
             userId: session.userId,
             groupId: session.channelId.toString(),
           }, {
             wifeHistories: userData.wifeHistories,
             fuckWifeDate: userData.fuckWifeDate,
-            todayAffection: userData.todayAffection,
+            // todayAffection: userData.todayAffection,
           });
           // 更新群数据
           ctx.database.set("groupData", {
@@ -173,23 +173,23 @@ export function rlp(ctx: Context,config: Config) {
               item.affectionLevel = utils.affectionLevel(item.affection);
             }
           })
-          const target = userData.todayAffection.find(item => item.wifeName === wifeName);
+          // const target = userData.todayAffection.find(item => item.wifeName === wifeName);
 
-          if (!target) {
-            userData.todayAffection.push({
-              wifeName: wifeName,
-              todayAffection: affection,
-            });
-          } else {
-            target.todayAffection += affection;
-          }
+          // if (!target) {
+          //   userData.todayAffection.push({
+          //     wifeName: wifeName,
+          //     todayAffection: affection,
+          //   });
+          // } else {
+          //   target.todayAffection += affection;
+          // }
           ctx.database.set("wifeUser", {
             userId: session.userId,
             groupId: session.channelId.toString(),
           }, {
             wifeHistories: userData.wifeHistories,
             fuckWifeDate: userData.fuckWifeDate,
-            todayAffection: userData.todayAffection,
+            // todayAffection: userData.todayAffection,
           });
           // 更新群数据
           ctx.database.set("groupData", {

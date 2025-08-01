@@ -79,7 +79,7 @@ export function nlp(ctx: Context, config: Config) {
             ntrCount: 0,
             divorceCount: 0,
             wifeName: "",
-            todayAffection: [],
+            // todayAffection: [],
           }
         );
       }
@@ -168,15 +168,15 @@ export function nlp(ctx: Context, config: Config) {
       const targetWifeAffection = targetUserData.wifeHistories.find(
         (item) => item.wifeName === targetUserData.wifeName
       )?.affection ?? 0;
-      const targetTodayAffection = targetUserData.todayAffection.find(
-        (item) => item.wifeName === targetUserData.wifeName
-      )?.todayAffection ?? 0;
+      // const targetTodayAffection = targetUserData.todayAffection.find(
+      //   (item) => item.wifeName === targetUserData.wifeName
+      // )?.todayAffection ?? 0;
       const affection =
         myUserData.wifeHistories.find(
           (item) => item.wifeName === targetUserData.wifeName
         )?.affection ?? 0; // 默认为 0
 
-      ctx.logger.info(`lpNum: ${lpNum}, ntrSuccessCount: ${ntrSuccessCount}, targetWifeNum: ${targetWifeNum}, targetaffectionLevel: ${targetaffectionLevel}, todayAffection: ${targetTodayAffection}, affection: ${affection}`);
+      // ctx.logger.info(`lpNum: ${lpNum}, ntrSuccessCount: ${ntrSuccessCount}, targetWifeNum: ${targetWifeNum}, targetaffectionLevel: ${targetaffectionLevel}, todayAffection: ${targetTodayAffection}, affection: ${affection}`);
       // 生成一个0-99的随机整数
       const randomNumber = Math.floor(Math.random() * 100);
       // 概率值
@@ -187,7 +187,7 @@ export function nlp(ctx: Context, config: Config) {
         ntrSuccessCount,
         targetWifeNum,
         targetaffectionLevel,
-        targetTodayAffection,
+        // targetTodayAffection,
         affection,
         targetWifeAffection
       );

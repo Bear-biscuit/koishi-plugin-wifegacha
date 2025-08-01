@@ -6,9 +6,8 @@ import { Context } from "koishi";
  * @param ntrSuccessCount 黄毛牛老婆成功次数
  * @param targetWifeNum 苦主老婆数量
  * @param targetaffectionLevel 苦主老婆好感度等级
- * @param targetTodayAffection 苦主今日获得好感度
  * @param affection 黄毛对苦主老婆的好感度
- * @param targetWifeAffection 苦主老婆的好感度
+ * @param targetAffection 苦主老婆好感度
  * @returns 成功率
  */
 export function camelCase(lpNum: number,ntrSuccessCount:number,targetWifeNum:number,targetaffectionLevel:number,targetTodayAffection:number,affection:number=0,targetWifeAffection:number=0) {

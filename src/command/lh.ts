@@ -48,7 +48,7 @@ export function lh(ctx: Context, config: Config) {
           divorceCount: 0,
           wifeName: "",
           ntrCount: 0,
-          todayAffection: [],
+          // todayAffection: [],
         }
       );
     }
@@ -103,12 +103,12 @@ export function lh(ctx: Context, config: Config) {
           return item;
         }),
         divorceDate: new Date(),
-        todayAffection: userData.todayAffection.map(item => {
-          if(item.wifeName === userData.wifeName){
-            item.todayAffection -= 1;
-          }
-          return item;
-        }),
+        // todayAffection: userData.todayAffection.map(item => {
+        //   if(item.wifeName === userData.wifeName){
+        //     item.todayAffection -= 1;
+        //   }
+        //   return item;
+        // }),
       }
     );
     // 更新群数据

@@ -58,7 +58,7 @@ export async function checkGroupDate(
         ntrCount:0,
         divorceCount:0,
         wifeName:'',
-        todayAffection:[],
+        // todayAffection:[],
        }
     );
     const nowWifeList = (await ctx.database.get("wifeUser", {groupId: session.channelId.toString()})).map(item=>{
