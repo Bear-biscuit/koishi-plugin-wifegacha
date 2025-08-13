@@ -18,7 +18,8 @@ export function camelCase(lpNum: number,ntrSuccessCount:number,targetWifeNum:num
   // console.log(a,b,c,rate)
   // // 保留两位小数（数字类型）
   // return Number(rate.toFixed(2));
-  const result = 50 + (100*Math.atan(affection-targetWifeAffection))/Math.PI
+  console.log("targetWifeAffection",targetWifeAffection,"affection",affection)
+  const result = 50 + (100*Math.atan(targetWifeAffection-affection))/Math.PI
 
   return parseFloat(result.toFixed(2)); // 返回数字类型，保留两位小数
 }
